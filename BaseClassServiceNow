@@ -1,0 +1,50 @@
+package serviceNow;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+
+import io.github.sukgu.Shadow;
+
+public class BaseClassServiceNow {
+	public ChromeDriver driver;
+	@BeforeMethod	
+	public void precondition() {
+//		ChromeOptions option = new ChromeOptions();
+//		option.addArguments("--disable-notifications");
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		driver.get("https://signon.service-now.com/");
+		WebElement username = driver.findElement(By.id("email"));
+		username.sendKeys("gokulrajgovindaraj4@gmail.com");
+		
+		WebElement next = driver.findElement(By.id("username_submit_button"));
+		next.click();
+		
+		//Servicenow@2407
+		WebElement PWD = driver.findElement(By.id("password"));
+		PWD.sendKeys("Servicenow@2407");
+		
+		driver.findElement(By.id("password_submit_button")).click();
+		
+		Shadow dom = new Shadow(driver);
+		dom.setImplicitWait(10);
+		dom.findElementByXPath("//div[@aria-label='All' and text()='All']").click();
+		dom.findElementByXPath("//span[text()='Incidents']").click();
+		WebElement searchframe = dom.findElementByXPath("//iframe[@title='Main Content']");
+		driver.switchTo().frame(searchframe);
+	}
+
+	@AfterMethod
+	public void postcondition() {
+		
+		driver.close();
+	}
+
+}//Username: aes.creator
+//Current password: IB9K9Seg=kl+
