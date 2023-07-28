@@ -1,0 +1,37 @@
+package serviceNow;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+
+public class NewIncident extends BaseClassServiceNow {
+	@Test
+
+	public void createNewIncident()  {
+		
+		
+
+		driver.findElement(By.xpath("//button[text()='New']")).click();
+		driver.findElement(By.id("incident.short_description")).sendKeys("My second incident");
+		driver.findElement(By.xpath("//button[text()='Submit']")).click();
+		WebElement incidenttable = driver.findElement(By.xpath("//table[@id='incident_table']"));
+		List<WebElement> rows = incidenttable.findElements(By.xpath("//table[@id='incident_table']//tr"));
+		List<WebElement> columns = incidenttable.findElements(By.xpath("//table[@id='incident_table']//th"));
+		System.out.println(rows.size());
+		System.out.println(columns.size());
+
+		String myincident = driver.findElement(By.xpath("//table[@id='incident_table']//tr[1]/td[3]")).getText();
+		System.out.println("Created Incident: " + myincident);
+		driver.findElement(By.xpath("//input[@placeholder='Search']")).sendKeys(myincident,Keys.ENTER);
+		String Verifiedincident = driver.findElement(By.xpath("//table[@id='incident_table']//tr[1]/td[3]")).getText();
+		if (myincident.equals(Verifiedincident)) {
+			System.out.println("Incident created successfully");
+		} else {
+			System.out.println("Incident not created");
+		}
+	}
+
+}
